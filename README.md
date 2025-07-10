@@ -1,7 +1,34 @@
-# MacOS-Autoclicker
-This is an Autoclicker that when you run the .app file, it works on mac, but if you run the key.py file it will work on windows. This is a simple project that I have made and is mainly for macOS. DO not expect it to be very good as I am a very beginner-intermediate programmer, and I also don't have a lot of time.
+# MacOS Auto-Clicker v1.0
 
+A simple auto-clicker GUI application for MacOS built with Python and Tkinter.  
+It allows you to automatically click either the **spacebar** key or the **left mouse button** at a customizable clicks-per-second (CPS) rate.
 
-# Beta .1
+---
 
-To use this autoclicker you need to open terminal and downlaod the file named main.py. The navigate to the folder the main.py file is locateed in and then type this command into your terminal     python3 main.py     After you type the command, it will prompt you what to do. If when you try to stop the program and it doesn't stop then just close out the terminal application.
+## Features
+
+- Select between clicking the **Spacebar** or the **Left Mouse Button**.
+- Set the number of clicks per second (CPS).
+- Start and stop the auto-clicking with buttons.
+- Logs click activity and status messages in a scrolling text output.
+- Runs clicking in a background thread to keep the GUI responsive.
+- Uses native macOS Quartz APIs for precise mouse clicks.
+
+---
+
+## Requirements
+
+- Python 3.12+  
+- `pynput` library  
+- macOS platform (uses Quartz CoreGraphics API)
+
+---
+
+## Installation
+
+1. Install Python 3.12 or newer from [python.org](https://www.python.org/downloads/mac-osx/).
+
+2. Install dependencies using pip:
+   ```bash
+   pip install pynput
+3. Type this in a terminal python3 main.py
