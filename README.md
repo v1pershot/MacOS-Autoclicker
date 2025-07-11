@@ -32,3 +32,7 @@ It allows you to automatically click either the **spacebar** key or the **left m
    ```bash
    pip install pynput
 3. Type this in a terminal python3 main.py
+
+## Future Updates
+
+For update v1.1 I plan to add a menubar to the top and a way to track user stats localy through a text file. Windows support will not be added as the Auto-Clicker uses MacOS dependant libraies. Major features I plan to add is more keys for clicking and stoping, In-app cps tester, and a way to systematically tell the mouse where to be for more advanced controll over position and timing. Minor updates include: GUI fixes and quality updates, better timing of cps, and less lag. 
