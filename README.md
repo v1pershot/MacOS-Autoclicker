@@ -38,3 +38,7 @@ It allows you to automatically click either the **spacebar** key or the **left m
 ## Future Updates
 
 For update v1.1 I plan to add a menubar to the top and a way to track user stats localy through a text file. Windows support will not be added as the Auto-Clicker uses MacOS dependant libraies. Major features I plan to add is more keys for clicking and stoping, In-app cps tester, and a way to systematically tell the mouse where to be for more advanced controll over position and timing. Minor updates include: GUI fixes and quality updates, better timing of cps, and less lag. 
+
+## Troubleshooting/Bugfixes
+
+If you need help join my discord server and talk to me there. First 100 people to join get OG role, and if you make a pull request that help this project you will get a special role. Link here: https://discord.gg/SKqHZkmfmT
