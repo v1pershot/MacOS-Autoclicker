@@ -41,4 +41,5 @@ For update v1.1 I plan to add a menubar to the top and a way to track user stats
 
 ## Troubleshooting/Bugfixes
 
-If you need help join my discord server and talk to me there. First 100 people to join get OG role, and if you make a pull request that help this project you will get a special role. Link here: https://discord.gg/SKqHZkmfmT
+Make a pull request and explain whats wrong.
+
