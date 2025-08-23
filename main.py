@@ -68,7 +68,7 @@ def click_loop():
         clicks_nums += 1
         counter += 1
 
-        if clicks_nums % 10 == 0:
+        if clicks_nums % 10000 == 0:
             key_name = "Spacebar" if choice == 1 else "Left Mouse"
             printTerm(f'Clicked {key_name} {clicks_nums} times.')
 
@@ -85,12 +85,15 @@ def start_clicking():
         return
 
     run = True
+    delay = int(start_delay_button.get())
+    time.sleep(delay)
     start_button.config(state=tk.DISABLED)
     stop_button.config(state=tk.NORMAL)
     last_cps = int(cps_entry.get())
 
     thread = Thread(target=click_loop, daemon=True)
     thread.start()
+    
 
 def stop_clicking():
     global run
@@ -98,6 +101,11 @@ def stop_clicking():
     men.update(run, root, counter, last_cps)
     start_button.config(state=tk.NORMAL)
     stop_button.config(state=tk.DISABLED)
+
+def multiple_commands():
+    thread2 = Thread(target=stop_clicking, daemon=True)
+    thread2.start()
+    root.destroy()
 
 
 men.dataOpen()
@@ -114,7 +122,7 @@ menubar = tk.Menu(root)
 main_menu = tk.Menu(menubar, tearoff=0)
 main_menu.add_command(label='Stats', command=lambda: men.StatsPage(root, counter))
 main_menu.add_command(label='Expanded Terminal', command=lambda: men.TerminalPage(root))
-main_menu.add_command(label='Quick Kill', command=root.destroy, accelerator='Ctrl+Q')
+main_menu.add_command(label='Quick Kill', command=multiple_commands, accelerator='Ctrl+Q')
 menubar.add_cascade(label='Main', menu=main_menu)
 
 view_menu = tk.Menu(menubar, tearoff=0)
@@ -140,11 +148,17 @@ tk.Label(frame, text='Key must be selected!').pack(anchor='e')
 tk.Radiobutton(frame, text='Spacebar', variable=v, value=1, command=on_select).pack(anchor='e')
 tk.Radiobutton(frame, text="Left Mouse", variable=v, value=2, command=on_select).pack(anchor='e')
 
+tk.Label(frame, text='Start delay (Seconds)').pack(anchor='e')
+
+start_delay_button = tk.Entry(frame, width=2)
+start_delay_button.pack(padx='52', anchor='e')
+start_delay_button.insert(0, '1')
+
 
 start_button = tk.Button(frame, text="Start Clicking", command=start_clicking, state=tk.DISABLED)
 start_button.pack(pady=5)
 
-stop_button = tk.Button(frame, text="Stop Clicking", command=stop_clicking, state=tk.DISABLED)
+stop_button = tk.Button(frame, text="Stop Clicking(Ctrl+Q)", command=stop_clicking, state=tk.DISABLED)
 stop_button.pack(pady=5)
 
 output = scrolledtext.ScrolledText(frame, width=40, height=15, state=tk.DISABLED)
