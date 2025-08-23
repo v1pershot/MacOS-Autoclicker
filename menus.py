@@ -61,17 +61,19 @@ def CodeViewer(root):
         codeGUI.lift()
 
 def LogViewer(root):
-    global logGUI
+    global logGUI, data
     if logGUI is None or not logGUI.winfo_exists():
         logGUI = tk.Toplevel(root)
         logGUI.title('Saved Data')
         logGUI.geometry('305x380+555+165')
-        dataArea = tk.Label(logGUI, text=data, width='340', font=('Arial', 14))
+        data_text = "\n".join(f"{key}: {value}" for key, value in data.items())
+        dataArea = tk.Label(logGUI, text=data_text, width='340', font=('Arial', 14))
         dataArea.pack()
 
 def update(w_menu, root, total_clicks, last_cps):  # w_menu means which menu
     global statsGUI
     if statsGUI is not None and statsGUI.winfo_exists():
+        dataSave(total_clicks, last_cps)
         statsGUI.destroy()
         StatsPage(root, total_clicks)
     dataSave(total_clicks, last_cps)
@@ -92,10 +94,12 @@ def dataSave(total_clicks, last_cps):
     #print(f'Data Clicks: {data_clicks}')
     data['total_clicks'] = data_clicks
     data['last_cps'] = lcps
+    
     time.sleep(1)
     #print(data)
     with open('data.json', 'w') as f:
         json.dump(data, f, indent=4)
+
 
 def dataOpen():
     global data
