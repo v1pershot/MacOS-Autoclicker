@@ -1,4 +1,6 @@
 {
     "total_clicks": 0,
-    "last_cps": 100
+    "last_cps": 10,
+    "mode": "Spacebar",
+    "interval": 1000
 }
