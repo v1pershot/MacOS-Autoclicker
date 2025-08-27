@@ -1,4 +1,4 @@
-# MacOS Auto-Clicker v1.1.1
+# MacOS Auto-Clicker v1.1.2
 
 A simple auto-clicker GUI application for MacOS built with Python and Tkinter.  
 It allows you to automatically click either the **spacebar** key or the **left mouse button** at a customizable clicks-per-second (CPS) rate.
