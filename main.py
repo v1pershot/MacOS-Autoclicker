@@ -14,12 +14,15 @@ from Quartz.CoreGraphics import (
 import os
 import menus as men
 
-print("Running File:", os.path.abspath(__file__))
+print("Running File:", os.path.abspath(__file__))#idk why i have this, mostly for debuging purposes, will get rid of soon
+#All global variables for this file
 run = False
 clicks_nums = 0
 counter = 0
 keyboard = KeyboardController()
 last_cps = 0
+choice = 0
+
 
 
 # All Functions
@@ -43,7 +46,7 @@ def left_mouse_click():
     CGEventPost(kCGHIDEventTap, event_up)
 
 def click_loop():
-    global run, clicks_nums, counter
+    global run, clicks_nums, counter, choice
     choice = v.get()
     try:
         cps = int(cps_entry.get())
@@ -57,6 +60,7 @@ def click_loop():
     delay = 1.0 / cps
     clicks_nums = 0
     printTerm("Starting clicking...")
+    print_interval = men.solveInterval('close')
 
     while run:
         if choice == 1:
@@ -68,7 +72,8 @@ def click_loop():
         clicks_nums += 1
         counter += 1
 
-        if clicks_nums % 10000 == 0:
+        
+        if clicks_nums % print_interval == 0: # change that # for less/ more lag and feedback.
             key_name = "Spacebar" if choice == 1 else "Left Mouse"
             printTerm(f'Clicked {key_name} {clicks_nums} times.')
 
@@ -96,18 +101,21 @@ def start_clicking():
     
 
 def stop_clicking():
-    global run
+    global run, choice
     run = False
     men.update(run, root, counter, last_cps)
+    if choice == 2:
+        choice = 'Left Mouse'
+    else:
+        choice = 'Spacebar'
+    men.dataPipe(choice)
     start_button.config(state=tk.NORMAL)
     stop_button.config(state=tk.DISABLED)
 
 def multiple_commands():
     thread2 = Thread(target=stop_clicking, daemon=True)
     thread2.start()
-    root.destroy()
-
-
+   
 men.dataOpen()
 root = tk.Tk()
 root.title("MacOS Auto-Clicker")
@@ -121,8 +129,9 @@ menubar = tk.Menu(root)
 #Main menu setup
 main_menu = tk.Menu(menubar, tearoff=0)
 main_menu.add_command(label='Stats', command=lambda: men.StatsPage(root, counter))
-main_menu.add_command(label='Expanded Terminal', command=lambda: men.TerminalPage(root))
-main_menu.add_command(label='Quick Kill', command=multiple_commands, accelerator='Ctrl+Q')
+main_menu.add_command(label='Settings', command=lambda: men.SettingsPage(root))
+main_menu.add_command(label='Quick Stop', command=lambda: multiple_commands(), accelerator='Ctrl+W')
+main_menu.add_command(label='Quick Kill', command=lambda: multiple_commands(), accelerator='Ctrl+Q')
 menubar.add_cascade(label='Main', menu=main_menu)
 
 view_menu = tk.Menu(menubar, tearoff=0)
@@ -132,6 +141,7 @@ view_menu.add_command(label="View Saved Data", command=lambda: men.LogViewer(roo
 menubar.add_cascade(label='View', menu=view_menu)
 root.config(menu=menubar)
 root.bind_all('<Control-q>', lambda e: men.safeClose(root, counter, last_cps))
+root.bind_all('<Control-w>', lambda e: stop_clicking())
 
 
 frame = tk.Frame(root, relief=tk.RIDGE)
@@ -143,7 +153,7 @@ cps_entry.pack()
 cps_entry.insert(0, f"{men.data.get('last_cps', 20)}")
 
 v = tk.IntVar()
-v.set(0)
+v.set(0)#setting value for time being 
 tk.Label(frame, text='Key must be selected!').pack(anchor='e')
 tk.Radiobutton(frame, text='Spacebar', variable=v, value=1, command=on_select).pack(anchor='e')
 tk.Radiobutton(frame, text="Left Mouse", variable=v, value=2, command=on_select).pack(anchor='e')
@@ -158,7 +168,7 @@ start_delay_button.insert(0, '1')
 start_button = tk.Button(frame, text="Start Clicking", command=start_clicking, state=tk.DISABLED)
 start_button.pack(pady=5)
 
-stop_button = tk.Button(frame, text="Stop Clicking(Ctrl+Q)", command=stop_clicking, state=tk.DISABLED)
+stop_button = tk.Button(frame, text="Stop Clicking(Ctrl+W)", command=stop_clicking, state=tk.DISABLED)
 stop_button.pack(pady=5)
 
 output = scrolledtext.ScrolledText(frame, width=40, height=15, state=tk.DISABLED)
