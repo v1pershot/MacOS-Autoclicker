@@ -6,6 +6,8 @@ import webbrowser
 
 statsGUI, terminalGUI, codeGUI, logGUI = None,None, None, None
 data = {}
+choice = 0
+vm = 0
 
 def StatsPage(root, total_clicks):
     global statsGUI, data
@@ -26,7 +28,8 @@ def StatsPage(root, total_clicks):
         data = {
             'total_clicks': 0,
             'last_cps': data.get('last_cps', 20),
-            'mode': data.get('mode', 'left_mouse')
+            'mode': data.get('mode', choice),
+            'interval': data.get('interval', vm)
         }
         
         
@@ -39,12 +42,32 @@ def StatsPage(root, total_clicks):
     else:
         statsGUI.lift()
 
-def TerminalPage(root):
-    global terminalGUI
+def SettingsPage(root):
+    global terminalGUI, vm
+
+    def on_gui_close():
+        solveInterval('close2')
+        terminalGUI.destroy()
     if terminalGUI is None or not terminalGUI.winfo_exists():
         terminalGUI = tk.Toplevel(root)
-        terminalGUI.title('Expanded Terminal')
+        terminalGUI.title('Settings')
         terminalGUI.geometry('305x380+555+165')
+        terminalGUI.protocol("WM_DELETE_WINDOW", on_gui_close)
+
+        tk.Label(terminalGUI, text='Print intervals', font=("TkDefaultFont", 12, "bold")).pack(anchor='w')
+        tk.Label(terminalGUI, text="The smaller the number, more laggier it gets,\n but you won't see progress as quick\n(Default is 1k)").pack(anchor='w')
+        vm = tk.IntVar()
+        vm_value = solveInterval('open')
+        vm.set(vm_value)
+        tk.Radiobutton(terminalGUI, text='10', variable=vm, value=1,).pack(anchor='w')
+        tk.Radiobutton(terminalGUI, text="100", variable=vm, value=2).pack(anchor='w')
+        tk.Radiobutton(terminalGUI, text="1k", variable=vm, value=3).pack(anchor='w')
+        tk.Radiobutton(terminalGUI, text="10k", variable=vm, value=4).pack(anchor='w')
+        tk.Radiobutton(terminalGUI, text="100k", variable=vm, value=5).pack(anchor='w')
+        tk.Radiobutton(terminalGUI, text="1m", variable=vm, value=6).pack(anchor='w')
+
+        tk.Button(terminalGUI, text='Save', command=lambda: solveInterval('close2')).pack(pady='10')
+
     else:
         terminalGUI.lift()
 
@@ -89,11 +112,14 @@ def safeClose(root, total_clicks, last_cps):
 def dataSave(total_clicks, last_cps):
     global data
     lcps = last_cps
+    func_return = solveInterval('close')
     
     data_clicks = int(total_clicks) + int(data.get('total_clicks'))
     #print(f'Data Clicks: {data_clicks}')
     data['total_clicks'] = data_clicks
     data['last_cps'] = lcps
+    data['mode'] = choice
+    data['interval'] = func_return
     
     time.sleep(1)
     #print(data)
@@ -112,3 +138,58 @@ def dataOpen():
     else:
         data = {}
     #print(f"Loaded data: {data.get('total_clicks')}")
+
+def dataPipe(c_c_choice):
+    global choice
+    choice = c_c_choice
+
+def solveInterval(mode):
+    global data
+    if mode == 'close':
+        interval = 0
+        if vm.get() == 1:
+            interval = 10
+        elif vm.get() == 2:
+            interval = 100
+        elif vm.get() == 3:
+            interval = 1000
+        elif vm.get() == 4:
+            interval = 10000
+        elif vm.get() == 5:
+            interval = 100000
+        elif vm.get() == 6:
+            interval = 1000000
+        return interval
+    
+    if mode == 'close2':
+        interval2 = 0
+        if vm.get() == 1:
+            interval = 10
+        elif vm.get() == 2:
+            interval = 100
+        elif vm.get() == 3:
+            interval = 1000
+        elif vm.get() == 4:
+            interval = 10000
+        elif vm.get() == 5:
+            interval = 100000
+        elif vm.get() == 6:
+            interval = 1000000
+            print(interval2)
+        data['interval'] = interval2
+    
+    elif mode == 'open':
+        variable = 0
+        if data['interval'] == 10:
+            variable = 1
+        elif data['interval'] == 100:
+            variable = 2
+        elif data['interval'] == 1000:
+            variable = 3
+        elif data['interval'] == 10000:
+            variable = 4
+        elif data['interval'] == 100000:
+            variable = 5
+        elif data['interval'] == 1000000:
+            variable = 6
+        return variable
