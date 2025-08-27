@@ -144,52 +144,29 @@ def dataPipe(c_c_choice):
     choice = c_c_choice
 
 def solveInterval(mode):
-    global data
+    global vm, data
+
+    # Ensure vm is always an IntVar
+    if not isinstance(vm, tk.IntVar):
+        vm = tk.IntVar(value=3)  # default "1k"
+
+    mapping = {
+        1: 10,
+        2: 100,
+        3: 1000,
+        4: 10000,
+        5: 100000,
+        6: 1000000
+    }
+
     if mode == 'close':
-        interval = 0
-        if vm.get() == 1:
-            interval = 10
-        elif vm.get() == 2:
-            interval = 100
-        elif vm.get() == 3:
-            interval = 1000
-        elif vm.get() == 4:
-            interval = 10000
-        elif vm.get() == 5:
-            interval = 100000
-        elif vm.get() == 6:
-            interval = 1000000
-        return interval
-    
-    if mode == 'close2':
-        interval2 = 0
-        if vm.get() == 1:
-            interval = 10
-        elif vm.get() == 2:
-            interval = 100
-        elif vm.get() == 3:
-            interval = 1000
-        elif vm.get() == 4:
-            interval = 10000
-        elif vm.get() == 5:
-            interval = 100000
-        elif vm.get() == 6:
-            interval = 1000000
-            print(interval2)
+        return mapping.get(vm.get(), 1000)  # fallback 1k if not set
+
+    elif mode == 'close2':
+        interval2 = mapping.get(vm.get(), 1000)
         data['interval'] = interval2
-    
+        return interval2
+
     elif mode == 'open':
-        variable = 0
-        if data['interval'] == 10:
-            variable = 1
-        elif data['interval'] == 100:
-            variable = 2
-        elif data['interval'] == 1000:
-            variable = 3
-        elif data['interval'] == 10000:
-            variable = 4
-        elif data['interval'] == 100000:
-            variable = 5
-        elif data['interval'] == 1000000:
-            variable = 6
-        return variable
+        reverse_map = {v: k for k, v in mapping.items()}
+        return reverse_map.get(data.get('interval', 1000), 3)
